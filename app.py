@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 connection_string = "mongodb+srv://aayush:27112000@logindata.pcxo2we.mongodb.net"
 app.secret_key = 'your_secret_key'
-mongo = pymongo.MongoClient(connection_string, ssl_cert_reqs=ssl.CERT_NONE)
+mongo = pymongo.MongoClient(connection_string)
 
 
 @app.route('/')
