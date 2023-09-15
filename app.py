@@ -2,12 +2,13 @@ from flask import Flask, render_template, request, redirect, url_for, session
 # from flask_pymongo import PyMongo
 from bson import ObjectId
 import pymongo
+import ssl
 
 app = Flask(__name__)
 
 connection_string = "mongodb+srv://aayush:27112000@logindata.pcxo2we.mongodb.net"
 app.secret_key = 'your_secret_key'
-mongo = pymongo.MongoClient(connection_string)
+mongo = pymongo.MongoClient(connection_string, ssl_cert_reqs=ssl.CERT_NONE)
 
 
 @app.route('/')
