@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        /* Style for the navigation bar */
+        nav {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        /* Style for the login container */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .left-section {
+            flex: 1;
+        }
+
+        .right-section {
+            flex: 1;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        .error-message {
+            color: red;
+            margin-bottom: 20px;
+        }
+
+        /* Style for form elements */
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        select {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        button[type="submit"] {
+            width: 90%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="left-section">
+            <img src="{{ url_for('static', filename='befisc_side.png') }}" alt="Image" style="max-width: 95%; height: auto;">
+        </div>
+        <div class="right-section">
+            <h1>Befisc</h1>
+            <h2>Log In to Access Secret Data</h2>
+            <div class="error-message">
+                {% if error %}
+                    {{ error }}
+                {% endif %}
+            </div>
+            <p>Welcome! Enter your account to get all the information of your existing and target users.</p>
+            <form method="POST" action="{{ url_for('login') }}" style="margin-top: 50px;">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+
+                <label for="account_version">Account Version</label>
+                <select id="account_version" name="account_version">
+                    <option value="production">Production</option>
+                    <option value="staging">Staging</option>
+                </select>
+
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
