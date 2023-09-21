@@ -6,8 +6,6 @@ import pymongo
 from datetime import datetime, timedelta
 
 
-
-
 app = Flask(__name__)
 
 connection_string = "mongodb+srv://aayush:27112000@logindata.pcxo2we.mongodb.net/?retryWrites=true&w=majority"
@@ -29,16 +27,10 @@ def login():
 
     db = mongo.get_database("mydatabase")
     collection = db.get_collection("users")
-    collect = db.get_collection("access")
 
     # Check if the username and password exist in the database
     query = {'username': username, 'password': password}
     user = collection.find_one(query)
-
-    query_name = {'name': str(session['name'])}
-    usname = collect.find_one(query_name)
-    session['name'] = usname['name']
-    
     
     if user:
         # Set the session variables with user information
@@ -62,8 +54,8 @@ def login():
 @app.route('/dashboard')
 def dashboard():
     db = mongo.get_database("mydatabase")
-    collection = db.get_collection("access")
-    query = {'name': str(session['name'])}
+    collection = db.get_collection("users")
+    query = {'_id': ObjectId(session['user_id'])}
     users = collection.find_one(query)
 
     if users:
@@ -84,7 +76,7 @@ def profile():
     try:
         db = mongo.get_database("mydatabase")
         collection = db.get_collection("users")
-        query = {'name': str(session['name'])}
+        query = {'_id': ObjectId(session['user_id'])}
         users = collection.find_one(query)
 
 
@@ -142,7 +134,7 @@ def ifsc():
 
 @app.route('/drop')
 def drop():
-    options = ["Business_pan", "Ifsc_main", "Upi_basic"]
+    options = ["Business_pan", "Ifsc_main", "Upi_basic","upi_main"]
     
     selected_option = request.args.get('option')
     print(selected_option)
@@ -161,8 +153,8 @@ def drop():
 @app.route('/update', methods=['GET', 'POST'])
 def update():
     db = mongo.get_database("mydatabase")
-    collection = db.get_collection("access")
-    query = {'name': str(session['name'])}
+    collection = db.get_collection("users")
+    query = {'_id': ObjectId(session['user_id'])}
     services = collection.find_one(query)
 
     
@@ -170,18 +162,19 @@ def update():
 
     
 
+
+
 @app.route('/edit/<credit_type>', methods=['GET', 'POST'])
 def edit_credit(credit_type):
     db = mongo.get_database("mydatabase") 
-    collection = db.get_collection("access")
-    query = {'name': str(session['name'])}
+    collection = db.get_collection("users")
+    query = {'_id': ObjectId(session['user_id'])}
     service = collection.find_one(query)
 
     if request.method == 'POST':
         query = {"authkey": {"$exists": True}}
         serve = collection.find_one(query)
         authkey = serve.get("authkey")
-
         new_amount = float(request.form['new_amount'])
         url = "https://jyxatg7xrbep4piyupe5fk5a6u0kcvpk.lambda-url.ap-south-1.on.aws/"
         headers = {"authkey": f"{authkey}"}
@@ -205,8 +198,8 @@ def process():
 @app.route('/edit_all', methods=['GET', 'POST'])
 def edit_all():
     db = mongo.get_database("mydatabase") 
-    collection = db.get_collection("access")
-    query = {'name': str(session['name'])}
+    collection = db.get_collection("users")
+    query = {'_id': ObjectId(session['user_id'])}
     service = collection.find_one(query)
 
     for card in selected_cards:
