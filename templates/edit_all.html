@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Count</title>
+    <style>
+        /* Style for the navigation bar */
+        nav {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        /* Style for the login container */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .right-section {
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%; /* Adjust the width as desired */
+            max-width: 400px; /* Maximum width for proper feel */
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        .error-message {
+            color: red;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        select {
+            width: 100%; 
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box; 
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    {% extends "base.html" %}
+
+    {% block content %}
+    <div class="login-container">
+        <div class="right-section">
+            <h1>Edit Count of Services</h1>
+                <form method="POST">
+                    <label for="new_amount">Enter New Count:</label>
+                    <br><br>
+                    <input type="text" id="new_amount" name="new_amount" required>
+                    <button type="submit">Update</button>
+                </form>
+                <br>
+                <a href="/update" style="color: red;">Back to Services and Credits</a>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

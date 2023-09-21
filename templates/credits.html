@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Details</title>
+    <style>
+
+        html, body {
+            height: 100%;
+            margin: 0; /* Remove default margin to prevent unwanted spacing */
+            padding: 0; /* Remove default padding for a clean layout */
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #fff;
+        }
+
+
+        h1 {
+            color: #FFFFFF;
+            padding: 20px;
+        }
+
+        .error-message {
+            color: red;
+            margin-bottom: 20px;
+        }
+
+
+        label {
+            font-weight: bold;
+        }
+
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background-color: #fff; 
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            margin: 10px 0;
+            color: #FF0000; 
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            margin: 0;
+            padding: 20px;
+            border: none;
+            width: 100%; 
+            height: 100%; 
+        }
+
+        .card-text {
+            margin: 10px 0;
+            color: #333; 
+        }
+
+        .btn-primary1 {
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin: 10px 0;
+        }
+
+        .btn-primary1:hover {
+            background-color: #0056b3;
+        }
+
+        .header-container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .btn-edit-all {
+            position: absolute;
+            top: 20px; /* Adjust the top position as needed */
+            right: 20px; /* Adjust the right position as needed */
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-edit-all:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-primary {
+            position: absolute;
+            top: 70px; 
+            right: 20px; 
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+    </style>
+</head>
+<body>
+    {% extends "base.html" %}
+
+    {% block content %}
+    
+    <div class="header-container">
+        <h1>Services and Credits</h1>
+    </div>
+    <a href="/edit_all" id="edit-all-button" class="btn btn-edit-all">Edit All</a>
+    <button id="submit-button" class="btn btn-primary">Confirm</button>
+
+    
+    <div class="card-container">
+        {% if services.upi_basic is defined %}
+        <div class="card" style="width: 14rem;">
+            <div class="card-body">
+                <h5 class="card-title">UPI_Basic</h5>
+                <p class="card-text"> Count: #{{ services.upi_basic.count }} </p>
+                <br><input type="checkbox" class="card-checkbox" name="selected_cards[]" value="upi_basic"><br><br>
+                <a href="{{ url_for('edit_credit', credit_type='upi_basic', id=services._id) }}" class="btn btn-primary1">Edit</a>
+            </div>
+        </div>
+        {% endif %}
+        
+
+        {% if services.business_pan is defined %}
+        <div class="card" style="width: 14rem;">
+            <div class="card-body">
+                <h5 class="card-title">Business_Pan</h5>
+                <p class="card-text"> Count: #{{ services.business_pan.count }} </p>
+                <br><input type="checkbox" class="card-checkbox" name="selected_cards[]" value="business_pan"><br><br>
+                <a href="{{ url_for('edit_credit', credit_type='business_pan', id=services._id) }}" class="btn btn-primary1">Edit</a>
+            </div>
+        </div>
+        {% endif %}
+
+
+        {% if services.ifsc_main is defined %}
+        <div class="card" style="width: 14rem;">
+            <div class="card-body">
+                <h5 class="card-title">Ifsc_Main</h5>
+                <p class="card-text"> Count: #{{ services.ifsc_main.count }} </p>
+                <br><input type="checkbox" class="card-checkbox" name="selected_cards[]" value="ifsc_main"><br><br>
+                <a href="{{ url_for('edit_credit', credit_type='ifsc_main', id=services._id) }}" class="btn btn-primary1">Edit</a>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if services.ifsc_main is defined %}
+        <div class="card" style="width: 14rem;">
+            <div class="card-body">
+                <h5 class="card-title">Ifsc_Main</h5>
+                <p class="card-text"> Count: #{{ services.ifsc_main.count }} </p>
+                <br><input type="checkbox" class="card-checkbox" name="selected_cards[]" value="ifsc_main"><br><br>
+                <a href="{{ url_for('edit_credit', credit_type='ifsc_main', id=services._id) }}" class="btn btn-primary1">Edit</a>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if services.ifsc_main is defined %}
+        <div class="card" style="width: 14rem;">
+            <div class="card-body">
+                <h5 class="card-title">Ifsc_Main</h5>
+                <p class="card-text"> Count: #{{ services.ifsc_main.count }} </p>
+                <br><input type="checkbox" class="card-checkbox" name="selected_cards[]" value="ifsc_main"><br><br>
+                <a href="{{ url_for('edit_credit', credit_type='ifsc_main', id=services._id) }}" class="btn btn-primary1">Edit</a>
+            </div>
+        </div>
+        {% endif %}
+
+
+        {% if services.ifsc_main is defined %}
+        <div class="card" style="width: 14rem;">
+            <div class="card-body">
+                <h5 class="card-title">Ifsc_Main</h5>
+                <p class="card-text"> Count: #{{ services.ifsc_main.count }} </p>
+                <br><input type="checkbox" class="card-checkbox" name="selected_cards[]" value="ifsc_main"><br><br>
+                <a href="{{ url_for('edit_credit', credit_type='ifsc_main', id=services._id) }}" class="btn btn-primary1">Edit</a>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if services.ifsc_main is defined %}
+        <div class="card" style="width: 14rem;">
+            <div class="card-body">
+                <h5 class="card-title">Ifsc_Main</h5>
+                <p class="card-text"> Count: #{{ services.ifsc_main.count }} </p>
+                <br><input type="checkbox" class="card-checkbox" name="selected_cards[]" value="ifsc_main"><br><br>
+                <a href="{{ url_for('edit_credit', credit_type='ifsc_main', id=services._id) }}" class="btn btn-primary1">Edit</a>
+            </div>
+        </div>
+        {% endif %}
+
+
+        {% if services.ifsc_main is defined %}
+        <div class="card" style="width: 14rem;">
+            <div class="card-body">
+                <h5 class="card-title">Ifsc_Main</h5>
+                <p class="card-text"> Count: #{{ services.ifsc_main.count }} </p>
+                <br><input type="checkbox" class="card-checkbox" name="selected_cards[]" value="ifsc_main"><br><br>
+                <a href="{{ url_for('edit_credit', credit_type='ifsc_main', id=services._id) }}" class="btn btn-primary1">Edit</a>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if services.ifsc_main is defined %}
+        <div class="card" style="width: 14rem;">
+            <div class="card-body">
+                <h5 class="card-title">Ifsc_Main</h5>
+                <p class="card-text"> Count: #{{ services.ifsc_main.count }} </p>
+                <br><input type="checkbox" class="card-checkbox" name="selected_cards[]" value="ifsc_main"><br><br>
+                <a href="{{ url_for('edit_credit', credit_type='ifsc_main', id=services._id) }}" class="btn btn-primary1">Edit</a>
+            </div>
+        </div>
+        {% endif %}
+
+
+        {% if services.ifsc_main is defined %}
+        <div class="card" style="width: 14rem;">
+            <div class="card-body">
+                <h5 class="card-title">Ifsc_Main</h5>
+                <p class="card-text"> Count: #{{ services.ifsc_main.count }} </p>
+                <br><input type="checkbox" class="card-checkbox" name="selected_cards[]" value="ifsc_main"><br><br>
+                <a href="{{ url_for('edit_credit', credit_type='ifsc_main', id=services._id) }}" class="btn btn-primary1">Edit</a>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <script>
+        document.getElementById('edit-all-button').addEventListener('click', function () {
+            const checkboxes = document.querySelectorAll('.card-checkbox');
+            checkboxes.forEach((checkbox) => {
+                checkbox.checked = true;
+            });
+        });
+
+        document.getElementById('submit-button').addEventListener('click', function () {
+            const selectedCheckboxes = document.querySelectorAll('.card-checkbox:checked');
+            const selectedValues = Array.from(selectedCheckboxes).map((checkbox) => checkbox.value);
+
+            // Send the selected values to the server using an AJAX request
+            fetch('/process', {
+                method: 'POST',
+                body: JSON.stringify({ selected_cards: selectedValues }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the server's response if needed
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+
+    {% endblock %}
+</body>
+</html>
+
+
