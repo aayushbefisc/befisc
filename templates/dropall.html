@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insert Services</title>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px;
+        }
+
+        /* Increase the height of the login container */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Increase the height as desired */
+        }
+
+        .right-section {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 600px; /* Increase the width as desired */
+            height: auto; /* Allow height to adjust based on content */
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        input[type="text"], input[type="submit"] {
+            width: 90%; /* Set the width to 100% to make them the same width */
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            width: 95%; /* Set the width to 100% for the submit button */
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        select,
+        input[type="submit"],
+        input[type="text"] {
+            width: 100%; /* Set the width to 100% to make them the same width */
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box; /* Ensure padding and border are included in the width */
+        }
+    </style>
+</head>
+<body>
+    {% extends "base.html" %}
+
+    {% block content %}
+
+    <div class="login-container">
+        <div class="right-section">
+            <h1>Add All Services</h1>
+            <p class="output-message" style="color: red;">{{ output }}</p>
+            <br><br>
+            <form method="POST" action="/insertdata">
+                <label for="text1">Name:</label>
+                <select id="dropdown" name="option">
+                    {% for client in client_list %}
+                    <option value="{{ client }}">{{ client }}</option>
+                    {% endfor %}
+                </select>
+                <br><br>
+        
+                <label for="text2">Count:</label>
+                <input type="text" id="text2" name="text2">
+                <br><br>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+    {% endblock %}
+    
+</body>
+</html>

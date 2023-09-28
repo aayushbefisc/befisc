@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insert Services</title>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .left-section {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .right-section {
+            flex: 1.5; /* Increase the flex value to adjust width */
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ccc; /* Add a border */
+            width: 450px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        select,
+        input[type="submit"],
+        input[type="text"] {
+            width: 100%; /* Set the width to 100% to make them the same width */
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box; /* Ensure padding and border are included in the width */
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .search-form {
+            margin: 0 auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f5f5f5;
+        }
+
+        .input-block {
+            margin-bottom: 20px;
+        }
+
+        .input-block label {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background-color: #fff;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            margin: 10px 0;
+            color: #FF0000;
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            margin: 0;
+            padding: 20px;
+            border: none;
+            width: 60%;
+        }
+
+        .card-text {
+            margin: 10px 0;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    {% extends "base.html" %}
+
+    {% block content %}
+    <div class="left-section">
+        <!-- Content for the left section -->
+    </div>
+    <div class="right-section">
+        <form method="POST" action="/findservice" name="search-form" class="search-form">
+            <label for="search-input">Client:</label>
+            <input type="text" id="search-input" name="search-input" placeholder="Get Client by Name">
+            <div id="suggestions-container" style="display: none;">
+                <ul id="client-suggestions"></ul>
+            </div>
+            <button type="submit">Search</button>
+        </form>
+
+        <p class="output-message" style="color: red;">{{ output }}</p>
+
+        <br>
+        <form method="GET" action="/drop">
+            <label for="text2">Count:</label>
+            <br>
+            <input type="text" id="text2" name="text2" optional>
+            <br><br>
+
+            <label for="dropdown">Select a Service:</label>
+            <br>
+            <select id="dropdown" name="option">
+                {% for option in options %}
+                <option value="{{ option }}">{{ option }}</option>
+                {% endfor %}
+            </select>
+            <br><br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+
+    <script>
+        var clientList = {{ client_list | safe }};
+        
+        var searchInput = document.getElementById("search-input");
+        var suggestionsContainer = document.getElementById("suggestions-container");
+        var suggestionsList = document.getElementById("client-suggestions");
+
+        searchInput.addEventListener("input", function() {
+            var input = this.value.toLowerCase();
+            var matchingClients = clientList.filter(function(client) {
+                return client.toLowerCase().includes(input);
+            });
+
+            // Clear previous suggestions
+            suggestionsList.innerHTML = "";
+
+            // Display matching suggestions
+            if (input.length > 0) {
+                matchingClients.forEach(function(client) {
+                    var suggestionItem = document.createElement("li");
+                    suggestionItem.textContent = client;
+                    suggestionsList.appendChild(suggestionItem);
+                });
+                suggestionsContainer.style.display = "block";
+            } else {
+                suggestionsContainer.style.display = "none";
+            }
+        });
+
+        // Handle suggestion click
+        suggestionsList.addEventListener("click", function(event) {
+            if (event.target.tagName === "LI") {
+                searchInput.value = event.target.textContent;
+                suggestionsContainer.style.display = "none";
+            }
+        });
+    </script>
+
+    {% endblock %}
+</body>
+</html>

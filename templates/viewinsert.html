@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insert Services</title>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .right-section {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 500px;
+            height: 320px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        select,
+        input[type="submit"] {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* Style for the form */
+        form.search-form {
+            margin: 0 auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f5f5f5;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Style for the label */
+        label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        input[type="text"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            width: 200px;
+        }
+
+        /* Style for the search button */
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        /* Style for the search button on hover */
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap; /* Allow cards to wrap to the next row */
+            justify-content: flex-start; /* Start from the left */
+            align-items: flex-start; /* Align items to the top */
+            margin: 20px;
+            padding: 20px;
+            border: none;
+        }
+    
+        /* Card styles */
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            background-color: #fff;
+            width: 12rem;
+            height: 10rem;
+            margin-right: 20px; /* Add margin to separate cards horizontally */
+            margin-bottom: 20px; /* Add margin to separate cards vertically */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+    
+        .card-title {
+            font-size: 1.25rem;
+            margin: center;
+            color: #FF0000;
+        }
+    
+        .card-text {
+            margin: 10px 0;
+            color: #333;
+        }
+    
+        /* Style for the page header */
+        .page-header {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            width: 100%; /* Ensure the header spans the entire row */
+            color: red;
+        }
+        
+        .intro-text {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            width: 100%;
+            color: red;
+        }
+
+        /* Style for the button */
+        button[type="button"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 10px 20px; /* Adjust padding */
+            margin-top: 20px; /* Add margin to separate from the cards */
+        }
+
+        /* Style for the button on hover */
+        button[type="button"]:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+</head>
+
+<body>
+    {% extends "base.html" %}
+
+    {% block content %}
+
+    <div style="margin-top: 130px;"></div>
+
+    
+    <form method="POST" action="/findservice" name="search-form" class="search-form">
+        <label for="search-input">Services:</label>
+        <input type="text" id="search-input" name="search-input" placeholder="Enter Services" onkeyup="filterServices()">
+        <div style="color: red;">
+            <h3>{{ display_text }}</h3>
+            <h3>{{ acc_type }}</h3>
+        </div>      
+    </form>
+
+    
+<!-- ... your existing HTML code ... -->
+
+<h2 style="text-align: center; margin-top: 20px; color: black;">Existing Services</h2>
+
+
+ <!-- Style the "Add New Service" button -->
+ <div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+    <button type="button" onclick="window.location.href='/drop'">Add New Service</button>
+</div>
+
+
+<!-- Initialize a variable to track the current div_id -->
+{% set current_div_id = "page-id-1" %}
+
+<!-- Add a container for the cards -->
+<div class="card-container">
+    {% if services %}
+        {% set page_id_divs = {} %} <!-- Initialize an empty dictionary to store divs for each page_id -->
+
+        <div class="intro-text">Know Your Business (KYB)</div>
+
+        {% for page_id, services_group in services.items() | groupby('1.page_id') %}
+            <!-- Sort services within each page_id group by '1.page_id' -->
+            {% set sorted_services = services_group | sort(attribute='1.page_id') %}
+            
+            {% if current_div_id != "page-id-" ~ page_id %}
+                <!-- Create a new div for the next page_id at the top -->
+                {% set current_div_id = "page-id-" ~ page_id %}
+                <div class="page-header">
+                    {% if page_id.strip() == "2" %}
+                        Utility Verification
+                    {% elif page_id.strip() == "3" %}
+                        Know Your Customer (KYC)
+                    {% elif page_id.strip() == "4" %}
+                        Mobile Number Lookup
+                    {% elif page_id.strip() == "5" %}
+                        Digital Footprint Lookup
+                    {% elif page_id.strip() == "6" %}
+                        Fraud Indicators
+                    {% elif page_id.strip() == "7" %}
+                        Vehicle Verification
+                    {% elif page_id.strip() == "8" %}
+                        Financial Checks
+                    {% else %}
+                        N
+                    {% endif %}
+                </div>
+            {% endif %}
+            
+            {% for service_name, service_data in sorted_services %}
+                <div class="card" data-service="{{ service_name }}">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color: black;">{{ service_data.label }}</h5>
+                        <p>Count: {{ service_data.count }}</p>
+                        <!-- Display other service data if needed -->
+                        <!-- <p>Page ID: {{ service_data.page_id }}</p> -->
+                    </div> 
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% else %}
+        <p>No services found.</p>
+    {% endif %}
+</div>
+
+<!-- ... your existing HTML code ... -->
+
+
+    <script>
+        function filterServices() {
+            // Get the search input value
+            var input = document.getElementById("search-input");
+            var filter = input.value.toLowerCase();
+
+            // Get all cards in the card container
+            var cards = document.querySelectorAll(".card");
+
+            // Loop through each card and check if it matches the search
+            cards.forEach(function (card) {
+                var cardTitle = card.getAttribute("data-service").toLowerCase();
+                if (cardTitle.includes(filter)) {
+                    card.style.display = "block"; // Show the card
+                } else {
+                    card.style.display = "none"; // Hide the card
+                }
+            });
+        }
+        
+    </script>
+
+    {% endblock %}
+</body>
+
+</html>

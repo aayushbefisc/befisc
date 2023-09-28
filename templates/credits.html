@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Details</title>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <style>
+
+        .hidden {
+            display: none;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0; 
+            padding: 0; 
+        }
+
+        a {
+            text-decoration: none;
+            color: #fff;
+        }
+
+
+        h1 {
+            color: #FFFFFF;
+            padding: 20px;
+        }
+
+        .error-message {
+            color: red;
+            margin-bottom: 20px;
+        }
+
+
+        label {
+            font-weight: bold;
+        }
+
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background-color: #fff; 
+            width: 20%;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            margin: 10px 0;
+            color: #FF0000; 
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            margin: 0 auto; /* Center horizontally */
+            padding: 100px;
+            border: none;
+            width: 80%; /* Set the width to a fixed value */
+        }
+
+        .card-text {
+            margin: 10px 0;
+            color: #333; 
+        }
+
+        .btn-primary1 {
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin: 10px 0;
+        }
+
+        .btn-primary1:hover {
+            background-color: #0056b3;
+        }
+
+        .header-container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .btn-edit-all {
+            position: absolute;
+            top: 20px; /* Adjust the top position as needed */
+            right: 20px; /* Adjust the right position as needed */
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-edit-all:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-primary {
+            position: absolute;
+            top: 70px; 
+            right: 20px; 
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Style for the form container */
+        form {
+            margin: 0 auto; /* Center horizontally */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f5f5f5;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            height: 30px;
+            transform: translateX(-50%);
+        }
+
+        /* Style for the label */
+        label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        input[type="text"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            width: 200px;
+        }
+
+        /* Style for the search button */
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        /* Style for the search button on hover */
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        
+        
+
+
+    </style>
+</head>
+<body>
+    {% extends "base.html" %}
+
+    {% block content %}
+    
+    <form method="POST" action="/update">
+        <label for="search-input">Client:</label>
+        <input type="text" id="search-input" name="search-input" placeholder="Get Client By Name">
+
+        <div id="suggestions-container" style="display: none;">
+            <ul id="client-suggestions" ></ul>
+        </div>
+        <button type="submit">Search</button>
+        <div>
+            <h2>{{ display_text }}</h2>
+        </div>
+
+        <p class="output-message" style="color: red;">{{ output }}</p>
+        
+    </form>
+
+    
+    
+
+    <a href="/edit_all" id="edit-all-button" class="btn btn-edit-all hidden">Edit All</a>
+    <button id="submit-button" class="btn btn-primary hidden">Confirm</button>
+
+
+    <div class="card-container">
+    {% if services %}
+    <!-- Loop through the services -->
+    {% for service_name, service_data in services.items() %}
+    {% if service_data.page_id is defined %}
+        <div class="card" data-service="{{ service_name }}">
+            <div class="card-body">
+                <h5 class="card-title" style="color: black;">{{ service_data.label }}</h5>
+                <!-- Display other service data if needed -->
+                <p>Count: {{ service_data.count }}</p>
+                <br><input type="checkbox" class="card-checkbox" name="selected_cards[]" value="{{ service_name }}"><br><br>
+                <a href="{{ url_for('edit_credit', credit_type=service_name, id=services._id) }}" class="btn btn-primary1">Edit</a>
+            </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+    {% else %}
+    {% endif %}
+    </div>
+
+    <script>
+            var clientList = {{ client_list | safe }};
+            
+            var searchInput = document.getElementById("search-input");
+            var suggestionsContainer = document.getElementById("suggestions-container");
+            var suggestionsList = document.getElementById("client-suggestions");
+    
+            searchInput.addEventListener("input", function() {
+                var input = this.value.toLowerCase();
+                var matchingClients = clientList.filter(function(client) {
+                    return client.toLowerCase().includes(input);
+                });
+    
+                // Clear previous suggestions
+                suggestionsList.innerHTML = "";
+    
+                // Display matching suggestions
+                if (input.length > 0) {
+                    matchingClients.forEach(function(client) {
+                        var suggestionItem = document.createElement("li");
+                        suggestionItem.textContent = client;
+                        suggestionsList.appendChild(suggestionItem);
+                    });
+                    suggestionsContainer.style.display = "block";
+                } else {
+                    suggestionsContainer.style.display = "none";
+                }
+            });
+    
+            // Handle suggestion click
+            suggestionsList.addEventListener("click", function(event) {
+                if (event.target.tagName === "LI") {
+                    searchInput.value = event.target.textContent;
+                    suggestionsContainer.style.display = "none";
+                }
+            });
+
+        document.getElementById('edit-all-button').addEventListener('click', function () {
+            const checkboxes = document.querySelectorAll('.card-checkbox');
+            checkboxes.forEach((checkbox) => {
+                checkbox.checked = true;
+            });
+        });
+
+
+        document.getElementById('submit-button').addEventListener('click', function () {
+            const selectedCheckboxes = document.querySelectorAll('.card-checkbox:checked');
+            const selectedValues = Array.from(selectedCheckboxes).map((checkbox) => checkbox.value);
+
+            // Send the selected values to the server using an AJAX request
+            fetch('/process', {
+                method: 'POST',
+                body: JSON.stringify({ selected_cards: selectedValues }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the server's response if needed
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+        function checkAndShowButtons() {
+            const cards = document.querySelectorAll('.card');
+            const submitButton = document.getElementById('submit-button');
+            
+            for (const card of cards) {
+                if (card.style.display !== 'none') {
+                    submitButton.classList.remove('hidden');
+                    return; 
+                }
+            }
+            submitButton.classList.add('hidden');
+        }
+        checkAndShowButtons();
+
+        document.getElementById('submit-button').addEventListener('click', function () {
+            // Use the confirm function to show a confirmation dialog
+            const isConfirmed = confirm('Do you want to proceed?');
+
+            // If the user clicks OK, isConfirmed will be true
+            if (isConfirmed) {
+                // Click the Submit button programmatically
+                document.getElementById('edit-all-button').click();
+            } else {
+                // Handle the case where the user clicks Cancel or closes the dialog
+                alert('Cancelled.');
+            }
+        });
+        
+
+    </script>
+
+    {% endblock %}
+</body>
+</html>
